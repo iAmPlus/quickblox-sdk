@@ -1,0 +1,83 @@
+group 'com.quickblox.quickblox_sdk'
+version '1.0'
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.4.2'
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url "https://github.com/QuickBlox/quickblox-android-sdk-releases/raw/master/"
+        }
+    }
+}
+
+apply plugin: 'com.android.library'
+
+def safeExtGet(prop, fallback) {
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
+
+project.ext {
+    compileSdkVersion = 28
+    buildToolsVersion = "28.0.3"
+
+    minSdkVersion = 14
+    targetSdkVersion = 28
+
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
+    lintAbortOnError = false
+
+    // QuickBlox SDK version
+    qbSdkVersion = '3.9.6'
+}
+
+android {
+    compileSdkVersion safeExtGet('compileSdkVersion', project.ext.compileSdkVersion)
+    buildToolsVersion safeExtGet('buildToolsVersion', project.ext.buildToolsVersion)
+
+    defaultConfig {
+        minSdkVersion 16
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
+}
+
+repositories {
+    jcenter()
+    maven {
+        url 'https://maven.google.com/'
+        name 'Google'
+    }
+    maven {
+        url "https://github.com/QuickBlox/quickblox-android-sdk-releases/raw/master/"
+    }
+}
+
+dependencies {
+
+    //Quickblox SDK
+    implementation("com.quickblox:quickblox-android-sdk-messages:$project.qbSdkVersion")
+    implementation("com.quickblox:quickblox-android-sdk-chat:$project.qbSdkVersion")
+    implementation("com.quickblox:quickblox-android-sdk-content:$project.qbSdkVersion")
+    implementation("com.quickblox:quickblox-android-sdk-customobjects:$project.qbSdkVersion")
+    implementation("com.quickblox:quickblox-android-sdk-videochat-webrtc:$project.qbSdkVersion")
+}
