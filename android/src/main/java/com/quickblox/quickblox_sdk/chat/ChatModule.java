@@ -280,7 +280,8 @@ public class ChatModule implements BaseModule {
 
     private void disconnect(final MethodChannel.Result result) {
         removeSystemMessageListener();
-          removeIncomingMessageListener();
+        removeIncomingMessageListener();
+        removeStatusMessageListener();
         QBChatService.getInstance().logout(new QBEntityCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid, Bundle bundle) {
