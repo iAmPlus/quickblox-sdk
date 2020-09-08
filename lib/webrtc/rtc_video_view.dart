@@ -61,7 +61,7 @@ class RTCVideoViewController {
   static const PLAY_METHOD = "play";
   static const RELEASE_METHOD = "release";
   static const CALL_METHOD = "call";
-  static const STOP_METHOD = "STOP";
+  static const STOP_METHOD = "stop";
 
   RTCVideoViewController._(int id)
       : _channel = new MethodChannel('QBWebRTCFlutterVideoViewChannel/$id');

@@ -59,7 +59,7 @@ public class QBWebRTCFlutterVideoView implements PlatformView, MethodChannel.Met
                 release(methodCall, result);
                 break;
             case STOP_METHOD:
-                release(methodCall, result);
+                stop(methodCall, result);
                 break;
             default:
                 result.notImplemented();
