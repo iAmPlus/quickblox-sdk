@@ -61,6 +61,7 @@ class RTCVideoViewController {
   static const PLAY_METHOD = "play";
   static const RELEASE_METHOD = "release";
   static const CALL_METHOD = "call";
+  static const STOP_METHOD = "STOP";
 
   RTCVideoViewController._(int id)
       : _channel = new MethodChannel('QBWebRTCFlutterVideoViewChannel/$id');
@@ -95,6 +96,20 @@ class RTCVideoViewController {
     }
 
     await _channel.invokeMethod(PLAY_METHOD, values);
+  }
+
+  Future<void> stop(String sessionId, int userId) async {
+    Map<String, Object> values = Map();
+
+    if (sessionId != null) {
+      values["sessionId"] = sessionId;
+    }
+
+    if (userId != null) {
+      values["userId"] = userId;
+    }
+
+    await _channel.invokeMethod(STOP_METHOD, values);
   }
 
   Future<void> release() async {

@@ -28,6 +28,7 @@ public class QBWebRTCFlutterVideoView implements PlatformView, MethodChannel.Met
     private static final String SCALE_TYPE_METHOD = "scaleType";
     private static final String PLAY_METHOD = "play";
     private static final String RELEASE_METHOD = "release";
+    private static final String STOP_METHOD = "stop";
 
     private final QBRTCSurfaceView videoView;
     private final MethodChannel methodChannel;
@@ -55,6 +56,9 @@ public class QBWebRTCFlutterVideoView implements PlatformView, MethodChannel.Met
                 play(methodCall, result);
                 break;
             case RELEASE_METHOD:
+                release(methodCall, result);
+                break;
+            case STOP_METHOD:
                 release(methodCall, result);
                 break;
             default:
@@ -101,6 +105,29 @@ public class QBWebRTCFlutterVideoView implements PlatformView, MethodChannel.Met
                 if (videoTrack != null) {
                     videoTrack.addRenderer(videoView);
                     videoView.requestLayout();
+                } else {
+                    result.error("The video track is null", null, null);
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                result.error(errorMessage, null, null);
+            }
+        });
+    }
+
+    private void stopVideo(MethodCall methodCall, MethodChannel.Result result) {
+        Map<String, Object> data = methodCall.arguments();
+
+        String sessionId = data != null && data.containsKey("sessionId") ? (String) data.get("sessionId") : null;
+        Integer userId = data != null && data.containsKey("userId") ? (Integer) data.get("userId") : null;
+
+        webRTCCallService.getVideoTrack(sessionId, userId, new WebRTCCallService.ServiceCallback<QBRTCVideoTrack>() {
+            @Override
+            public void onSuccess(QBRTCVideoTrack videoTrack) {
+                if (videoTrack != null) {
+                    videoTrack.removeRenderer(videoTrack.getRenderer());
                 } else {
                     result.error("The video track is null", null, null);
                 }
